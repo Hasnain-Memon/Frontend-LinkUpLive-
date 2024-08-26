@@ -3,10 +3,8 @@ import Link from "next/link";
 import camera_gif from "../../public/camera_gif.gif";
 import Image from "next/image";
 import AnimatedImage from "@/components/AnimatedImage";
-
 export default function Home() {
-  
-  return <div className="px-4 h-screen w-full flex">
+    return <div className="px-4 h-screen w-full flex">
     <div className=" w-1/2 flex flex-col justify-center px-6 gap-8">
       <div id="hero-text" className="space-y-4">
         <h2 className="text-gray-800 font-semibold text-4xl">
@@ -40,5 +38,5 @@ export default function Home() {
         <p className="text-sm text-center text-gray-500">Click <span className="text-gray-800 font-bold">New meeting</span> to get a code that you can send to <br /> people that you want meet with.</p>
       </div>
     </div>
-  </div>
+  </div>;
 }
