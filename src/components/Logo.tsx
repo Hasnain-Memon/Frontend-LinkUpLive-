@@ -10,8 +10,8 @@ const prompt = Prompt({
 
 function Logo() {
   return <div className='flex items-center gap-1'>
-    <Image src={logo} alt='logo-image' className='w-8 mb-1'/>
-    <h1 className='font-bold text-xl text-gray-700 cursor-pointer'>
+    <Image src={logo} alt='logo-image' className='w-12 mb-1'/>
+    <h1 className='font-bold text-2xl text-gray-700 cursor-pointer'>
         <span className={prompt.className}>LinkUpLive</span>
     </h1>
   </div>
