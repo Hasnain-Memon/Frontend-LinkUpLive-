@@ -13,7 +13,7 @@ function Landing() {
       Your virtual meeting room for productive <br />and meaningful connections.
       </p>
       <button className='font-bold bg-blue-600 w-28 px-2 py-2 rounded-md text-gray-100'>
-        <Link href='/'>Get started</Link>
+        <Link href='/api/auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Flanding'>Get started</Link>
       </button>
     </div>
 

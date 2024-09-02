@@ -22,7 +22,7 @@ export default function RootLayout({
           <SocketProvider>
             <Providers>
                 <Header />
-                {children}
+                  {children}
             </Providers>
           </SocketProvider>
       </body>

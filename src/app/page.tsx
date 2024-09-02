@@ -7,11 +7,14 @@ import { useRouter } from 'next/navigation'
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
 import { useSocket } from "@/context/SocketContext";
+import { useSession } from "next-auth/react";
 
 const URL = "http://localhost:8000";
 
 export default function Home() {
   const { socket } = useSocket();
+
+  const session = useSession();
 
   // states of form -> Creating New Meeting
   const [name, setName] = useState<string>("");
@@ -42,57 +45,62 @@ export default function Home() {
       console.log("Existing(name, roomCode) & socket is not set")
     }
 
-    // creating media stream
-    let localStream;
-    try { 
-      localStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      })
-    } catch (error) {
-      console.log("Error creating local stream", error);
-      return;
-    }
+    socket?.emit('join-room', {existingName, existingRoomCode, socket});
+    console.log("emitted join room")
 
-    const peer = new RTCPeerConnection({
-      iceServers: [
-        {
-          urls: "stun:stun.stunprotocol.org"
-        }
-      ]
-    });
+    // // creating media stream
+    // let localStream;
+    // try { 
+    //   localStream = await navigator.mediaDevices.getUserMedia({
+    //     video: true,
+    //     audio: true,
+    //   })
+    // } catch (error) {
+    //   console.log("Error creating local stream", error);
+    //   return;
+    // }
 
-    // Add local stream tracks to the peer connection
-    localStream.getTracks().forEach(track => peer.addTrack(track, localStream));
+    // const peer = new RTCPeerConnection({
+    //   iceServers: [
+    //     {
+    //       urls: "stun:stun.stunprotocol.org"
+    //     }
+    //   ]
+    // });
 
-    // handle offer
-    socket?.on('offer', async ({offer, name: remoteName}) => {
-      console.log("Receiving offer from", remoteName);
+    // // Add local stream tracks to the peer connection
+    // localStream.getTracks().forEach(track => peer.addTrack(track, localStream));
 
-      try {
-        await peer.setRemoteDescription(new RTCSessionDescription(offer));
+    // // handle offer
+    // socket?.on('offer', async ({offer, name: remoteName}) => {
+    //   console.log("Receiving offer from", remoteName);
 
-        const localAnswer = await peer.createAnswer();
-        await peer.setLocalDescription(new RTCSessionDescription(localAnswer));
+    //   try {
+    //     await peer.setRemoteDescription(new RTCSessionDescription(offer));
 
-        socket.emit('answer', { sdp: localAnswer, existingName });
-      } catch (error) {
-        console.error('Error handling offer/answer:', error);
-      }
+    //     const localAnswer = await peer.createAnswer();
+    //     await peer.setLocalDescription(new RTCSessionDescription(localAnswer));
+
+    //     socket.emit('answer', { sdp: localAnswer, existingName });
+    //   } catch (error) {
+    //     console.error('Error handling offer/answer:', error);
+    //   }
     
-    });
+    // });
 
-    socket?.on('receive-ice-candidate', async ({candidate, senderName}) => {
-      console.log('Received ICE candidate from:', senderName);
+    // socket?.on('receive-ice-candidate', async ({candidate, senderName}) => {
+    //   console.log('Received ICE candidate from:', senderName);
 
-      try {
-        await peer.addIceCandidate(new RTCIceCandidate(candidate));
-      } catch (error) {
+    //   try {
+    //     await peer.addIceCandidate(new RTCIceCandidate(candidate));
+    //   } catch (error) {
         
-      }
-    })
+    //   }
+    // })
 
+    console.log("redirecting to existing room");
     router.push(`/room/${existingRoomCode}`);
+    console.log("successfully redirected to existing room");
   }
 
   useEffect(() => {
@@ -100,6 +108,18 @@ export default function Home() {
     setRoomId(id);
     console.log("room is setted in state:", id);
   }, []);
+
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.push('/landing');
+    }
+  }, [session.status, router]);
+
+  if (session.status === "loading") {
+    return <div className="h-[calc(100vh-6rem)] w-full flex items-center justify-center">
+      <h3 className="text-3xl font-semibold text-gray-500">Loading...</h3>
+    </div>
+  }
 
   return <div className="px-24 h-screen w-full flex">
     <div className=" w-1/2 flex flex-col justify-center px-6 gap-8">
@@ -132,7 +152,7 @@ export default function Home() {
             </h4>
             <input name="name" type="text" placeholder="Enter a name" className="border border-gray-400 p-3 rounded-md outline-none text-gray-600"
             onChange={(e) => setExistingName(e.target.value)} />
-            <input name="code" type="text" placeholder="Enter a Code" className="border border-gray-400 p-3 rounded-md outline-none text-gray-600"
+            <input name="room-code" type="text" placeholder="Enter a Code" className="border border-gray-400 p-3 rounded-md outline-none text-gray-600"
             onChange={(e) => setExistingRoomCode(e.target.value)} />
             <button type="submit" className="text-gray-400 font-semibold bg-transparent text-center w-[245px] hover:text-blue-600 py-4 border border-blue-600 rounded-md"><p>join</p></button>
           </form>
