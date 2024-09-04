@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useSocket } from "@/context/SocketContext";
 import { useSession } from "next-auth/react";
 
+
 const URL = "http://localhost:8000";
 
 export default function Home() {
@@ -141,7 +142,7 @@ export default function Home() {
     </div>
   }
 
-  return <div className="px-24 h-screen w-full flex">
+  return <div className="px-24 h-screen w-full flex ">
     <div className=" w-1/2 flex flex-col justify-center px-6 gap-8">
       <div id="hero-text" className="space-y-4">
         <h2 className="text-gray-800 font-semibold text-4xl">
@@ -159,7 +160,7 @@ export default function Home() {
             <input name="name" type="text" placeholder="Enter your name" className="border border-gray-400 p-3 rounded-md outline-none text-gray-600"
             onChange={(e) => setName(e.target.value)}
             />
-            <button type="submit" className=' text-gray-100 px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2 bg-blue-600 w-full'>
+            <button type="submit" className=' text-gray-100 px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2 bg-blue-600 w-full hover:bg-blue-500'>
               <Image priority={true} src={camera_gif} alt="camera_gif" className="w-8 mr-4"/>
               <span className="mr-12">New meeting</span>
             </button>
@@ -174,7 +175,7 @@ export default function Home() {
             onChange={(e) => setExistingName(e.target.value)} />
             <input name="room-code" type="text" placeholder="Enter a Code" className="border border-gray-400 p-3 rounded-md outline-none text-gray-600"
             onChange={(e) => setExistingRoomCode(e.target.value)} />
-            <button type="submit" className="text-gray-400 font-semibold bg-transparent text-center w-[245px] hover:text-blue-600 py-4 border border-blue-600 rounded-md"><p>join</p></button>
+            <button type="submit" className="text-gray-400 font-semibold bg-transparent text-center w-[245px] hover:text-blue-600 py-4 border border-blue-600 rounded-md">join</button>
           </form>
         </div>
       </div>
