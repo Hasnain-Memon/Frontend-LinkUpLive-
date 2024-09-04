@@ -3,9 +3,9 @@ import Link from "next/link";
 import camera_gif from "../../public/camera_gif.gif";
 import Image from "next/image";
 import AnimatedImage from "@/components/AnimatedImage";
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSocket } from "@/context/SocketContext";
 import { useSession } from "next-auth/react";
 
@@ -25,7 +25,8 @@ export default function Home() {
     
   const router = useRouter();
 
-  async function createRoom() {
+  async function createRoom(e: React.FormEvent) {
+    e.preventDefault();
 
     if (!(socket && name && roomId)) {
       console.log('Socket, name, or roomId is not set');
@@ -33,20 +34,39 @@ export default function Home() {
     }
 
     socket?.emit('create-room', {name, roomId});
-    console.log('emited create room');
 
-    console.log('Navigating to room:', roomId);
-    router.push(`/room/${roomId}`);
-    console.log('Navigation should be triggered now');
+    router.push(`/room/${roomId}?author=${session.data?.user?.name}`);
   }
 
-  async function joinRoom() {
+  async function joinRoom(e: React.FormEvent) {
+    e.preventDefault();
+
+    console.log("existingName:", existingName);
+    console.log("ExistingRoomCode:", existingRoomCode);
+    console.log('socket:', socket);
+    
+    console.log("first");
     if (!(existingName && existingRoomCode && socket)) {
-      console.log("Existing(name, roomCode) & socket is not set")
+      console.log("Existing(name, roomCode) & socket is not set");
+      throw new Error("Existing(name, roomCode) & socket is not set");
+    }
+    console.log("second");
+
+    socket.on('room-error', (error) => {
+      console.error("Room error from server:", error.message);
+      alert(`Error: ${error.message}`)
+      return;
+    })
+
+    try {
+      console.log("Emiting join-room");
+      socket.emit('join-room', {name: existingName, roomCode: existingRoomCode});
+      console.log("emitted join room");
+    } catch (error) {
+      throw new Error('Error emiting join-room event');
     }
 
-    socket?.emit('join-room', {existingName, existingRoomCode, socket});
-    console.log("emitted join room")
+    console.log("third");
 
     // // creating media stream
     // let localStream;
@@ -99,7 +119,7 @@ export default function Home() {
     // })
 
     console.log("redirecting to existing room");
-    router.push(`/room/${existingRoomCode}`);
+    router.push(`/room/${existingRoomCode}/join-meeting/${existingName}`);
     console.log("successfully redirected to existing room");
   }
 
@@ -150,7 +170,7 @@ export default function Home() {
             <h4 className="text-center text-lg text-gray-800 font-semibold">
               Enter Existing Meeting
             </h4>
-            <input name="name" type="text" placeholder="Enter a name" className="border border-gray-400 p-3 rounded-md outline-none text-gray-600"
+            <input name="existing-name" type="text" placeholder="Enter a name" className="border border-gray-400 p-3 rounded-md outline-none text-gray-600"
             onChange={(e) => setExistingName(e.target.value)} />
             <input name="room-code" type="text" placeholder="Enter a Code" className="border border-gray-400 p-3 rounded-md outline-none text-gray-600"
             onChange={(e) => setExistingRoomCode(e.target.value)} />
