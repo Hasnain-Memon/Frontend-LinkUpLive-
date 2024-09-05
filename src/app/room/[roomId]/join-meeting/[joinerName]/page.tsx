@@ -88,7 +88,7 @@ function Page({ params }: { params: { joinerName: string } }) {
         console.log("Error in join Meeting", error);
         throw new Error("Error in join Meeting", {
           cause: error
-        })
+        });
       }
       
     }

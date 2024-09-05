@@ -1,9 +1,22 @@
+"use client";
 import Link from 'next/link';
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image';
 import landing_page_image from "../../public/landing_page_image.png";
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation'
 
 function Landing() {
+
+  const session = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if(session.status === "authenticated"){
+      router.push('/');
+    }
+  }, [session.status, router])
+
   return <div className='h-[calc(h-screen-6rem)] w-full flex gap-8 px-24'>
     <div className='px-6 w-1/2 flex flex-col justify-center h-[calc(100vh-6rem)] gap-8'>
       <h1 className='text-5xl font-semibold font-sans text-gray-800 tracking-wide leading-tight'>
