@@ -1,8 +1,12 @@
-import { CameraIcon, MicIcon, MicOff, PhoneIcon, PhoneOff, VideoIcon } from "lucide-react";
+import { CameraIcon, MicIcon, MicOff, PhoneIcon, PhoneOff, VideoIcon, VideoOffIcon } from "lucide-react";
 import React from "react";
 
-function VideoControlButtons({ roomId }: {
-    roomId: string
+function VideoControlButtons({ roomId, onCamera, onMic, isCameraOn, isMicOn }: {
+    roomId: string,
+    onMic: any,
+    onCamera: any,
+    isMicOn: boolean,
+    isCameraOn: boolean
 }) {
 
 
@@ -15,11 +19,19 @@ function VideoControlButtons({ roomId }: {
             </div>
 
             <div className="space-x-2">
-                <button className="bg-gray-600 rounded-md p-2">
-                    <MicIcon className="text-gray-300"/>
+                <button onClick={onMic} className="bg-gray-600 rounded-md p-2">
+                    {isMicOn ? (
+                        <MicIcon className="text-gray-300"/>
+                    ) : (
+                        <MicOff className="text-gray-300"/>
+                    )}
                 </button>
-                <button className="bg-gray-600 rounded-md p-2">
-                    <VideoIcon className="text-gray-300"/>
+                <button onClick={onCamera} className="bg-gray-600 rounded-md p-2">
+                    {isCameraOn ? (
+                        <VideoIcon className="text-gray-300"/>
+                    ): (
+                        <VideoOffIcon className="text-gray-300"/>
+                    )}
                 </button>
                 <button className="bg-gray-600 rounded-md p-2">
                     <PhoneOff className="text-red-500"/>

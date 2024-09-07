@@ -2,31 +2,50 @@
 import React, { useEffect, useRef, useState } from 'react'
 import VideoControlButtons from './VideoControlButtons';
 import { useSocket } from '@/context/SocketContext';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Modal from './Modal';
+import Image from 'next/image';
 
 function NewMeeting({roomId}: {
     roomId: string,
 }) {
 
-    const session = useSession();
+  const session = useSession();
+
+  const router = useRouter();
 
   const searchParams = useSearchParams();
-  const author = searchParams?.get('author');
 
-  // refs
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
 
-  // local tracks
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
-
-  // remote tracks
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
-
   const [isCreate, setIsCreate] = useState<boolean>(false);
   const [isModalOpen, setModalOpen] = useState<boolean>(true);
+  const [isMicOn, setIsMicOn] = useState<boolean>(true);
+  const [isCameraOn, setIsCameraOn] = useState<boolean>(true);
+
+  const onMic = () => {
+    setIsMicOn((prev) => {
+      const newState = !prev;
+      if (localStream) {
+        localStream.getAudioTracks().forEach((track) => (track.enabled = newState));
+      }
+      return newState;
+    })
+  }
+
+  const onCamera = () => {
+    setIsCameraOn((prev) => {
+      const newState = !prev;
+      if (localStream) {
+        localStream.getVideoTracks().forEach((track) => (track.enabled = newState))
+      }
+      return newState;
+    });
+  }
 
   const onClose = () => {
     setModalOpen(false);
@@ -46,8 +65,8 @@ function NewMeeting({roomId}: {
       let localStream;
       try { 
         localStream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: false,
+          video: isCameraOn,
+          audio: isMicOn,
         })
         setLocalStream(localStream);
         if (localVideoRef.current) {
@@ -128,15 +147,21 @@ function NewMeeting({roomId}: {
     return <div className= 'h-[calc(100vh-8rem)]'>
         <div className='w-full flex h-full items-center justify-center gap-4'>
             <div className='space-y-2'>
-                <video 
+              <div className='bg-gray-200 rounded-sm h-[300px] w-[500px] overflow-hidden flex items-center justify-center'>
+                {isCameraOn ? (
+                    <video
                     ref={localVideoRef}
-                    className='bg-gray-200 rounded-sm h-[300px]'
                     width={500}
                     autoPlay={true}
-                />
-                <p className='text-gray-600 font-medium bg-gray-200 rounded-sm px-2 py-2'>
-                    {session.data?.user?.name}
-                </p>
+                    />
+                  
+                ) : (
+                  <Image width={200} height={200} src={`${session.data?.user?.image}`} alt={`${session.data?.user?.name} image`} className='rounded-full'/>
+                )}
+              </div>
+              <p className='text-gray-600 font-medium bg-gray-200 rounded-sm px-2 py-2'>
+                  {session.data?.user?.name}
+              </p>
             </div>
             <div className='space-y-2'>
                 <video 
@@ -150,7 +175,7 @@ function NewMeeting({roomId}: {
                 </p>
             </div>
         </div>
-        <VideoControlButtons roomId={roomId} />
+        <VideoControlButtons isCameraOn={isCameraOn} isMicOn={isMicOn} onCamera={onCamera} onMic={onMic} roomId={roomId} />
 
         <Modal isOpen={isModalOpen} onClose={setupMeeting}>
           <h2 className='text-xl font-semibold text-gray-900'>
