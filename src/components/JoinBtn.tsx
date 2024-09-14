@@ -21,7 +21,6 @@ const JoinBtn = () => {
             console.log("Existing(name, roomCode) & socket is not set");
             throw new Error("Existing(name, roomCode) & socket is not set");
         }
-        console.log("second");
     
         socket.on('room-error', (error) => {
             console.error("Room error from server:", error.message);
@@ -31,18 +30,11 @@ const JoinBtn = () => {
         })
     
         try {
-          console.log("Emiting join-room");
           socket.emit('join-room', {name, roomCode: existingRoomCode});
-          console.log("emitted join room");
         } catch (error) {
           throw new Error('Error emiting join-room event');
         }
-    
-        console.log("third");
-    
-        console.log("redirecting to existing room");
         router.push(`/room/${existingRoomCode}/join-meeting/${name}`);
-        console.log("successfully redirected to existing room");
       } // join
 
   return <>
