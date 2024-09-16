@@ -1,5 +1,4 @@
 "use client";
-import { useSocket } from '@/context/SocketContext';
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
@@ -8,7 +7,6 @@ const JoinBtn = () => {
 
     const [existingRoomCode, setExistingRoomCode] = useState<string>("");
 
-    const { socket } = useSocket();
     const router = useRouter();
     const session = useSession();
 
@@ -21,19 +19,7 @@ const JoinBtn = () => {
             console.log("Existing(name, roomCode) & socket is not set");
             throw new Error("Existing(name, roomCode) & socket is not set");
         }
-    
-        socket.on('room-error', (error) => {
-            console.error("Room error from server:", error.message);
-            alert(`Error: ${error.message}`);
-            router.push('/');
-            throw new Error(error.message);
-        })
-    
-        try {
-          socket.emit('join-room', {name, roomCode: existingRoomCode});
-        } catch (error) {
-          throw new Error('Error emiting join-room event');
-        }
+
         router.push(`/room/${existingRoomCode}/join-meeting/${name}`);
       } // join
 

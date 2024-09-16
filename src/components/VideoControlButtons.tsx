@@ -3,10 +3,10 @@ import React from "react";
 
 function VideoControlButtons({ roomId, onCamera, onMic, isCameraOn, isMicOn }: {
     roomId?: string,
-    onMic: any,
-    onCamera: any,
-    isMicOn: boolean,
-    isCameraOn: boolean
+    onMic?: any,
+    onCamera?: any,
+    isMicOn?: boolean,
+    isCameraOn?: boolean
 }) {
 
 

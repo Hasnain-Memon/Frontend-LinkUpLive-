@@ -16,7 +16,6 @@ export default function InnerHomePage() {
 
   const session = useSession();
   const router = useRouter();
-  
 
   useEffect(() => {
     const id: string = uuidv4();
