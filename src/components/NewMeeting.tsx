@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import VideoControlButtons from './VideoControlButtons';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import useSocketStore from '@/store/socketStore';
 
 function NewMeeting({roomId}: {
     roomId: string,
@@ -15,7 +16,31 @@ function NewMeeting({roomId}: {
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
 
   const session = useSession();
+  const { socket } = useSocketStore();
+
   const name = session.data?.user?.name;
+
+  const handlerUserJoined = ({name: PeerName, id: peerId}:{
+    name: string,
+    id: string
+  }) => {
+    try {
+      console.log("new user joined,", PeerName, peerId);
+      setRemoteName(PeerName);
+    } catch (error) {
+      console.log("Error in handlerUserJoined", error);
+    }
+  }
+
+  useEffect(() => {
+
+    socket?.on('user:joined', handlerUserJoined);
+
+    return () => {
+      socket?.off('user:joined', handlerUserJoined);
+    }
+
+  }, [socket, handlerUserJoined]);
 
   return <div className= 'h-[calc(100vh-8rem)]'>
       <div className='w-full flex h-full items-center justify-center gap-4'>
@@ -48,7 +73,7 @@ function NewMeeting({roomId}: {
               </p>
           </div>
       </div>
-      <VideoControlButtons />
+      <VideoControlButtons roomId={roomId} />
   </div>
     
 }
