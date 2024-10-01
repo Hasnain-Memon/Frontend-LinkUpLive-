@@ -8,6 +8,8 @@ import { useSession } from "next-auth/react";
 import NewMeetingBtn from "./NewMeetingBtn";
 import JoinBtn from "./JoinBtn";
 import { Loader2 } from "lucide-react";
+import usePeerStore from "@/store/peerStore";
+import useSocketStore from "@/store/socketStore";
 
 
 export default function InnerHomePage() {
@@ -16,6 +18,13 @@ export default function InnerHomePage() {
 
   const session = useSession();
   const router = useRouter();
+  const {createSocket} = useSocketStore();
+  const {createPeer} = usePeerStore()
+
+  useEffect(() => {
+    createSocket();
+    createPeer();
+  }, [createSocket, createPeer]);
 
   useEffect(() => {
     const id: string = uuidv4();

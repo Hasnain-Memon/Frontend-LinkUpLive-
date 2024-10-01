@@ -23,7 +23,7 @@ function AnimatedImage() {
             ease: "easeInOut"
           }}
         >
-          <Image priority={true} src={hero_img} alt="hero_img" className="w-[250px] animate-wiggle"/>
+          <Image priority={true} src={hero_img} alt="hero_img" className="w-[250px]"/>
         </motion.div>
       </motion.div>
   </div>

@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import './globals.css';
 import Header from "@/components/Header";
 import { Providers } from "./Provider";
-import SocketProvider from "@/components/SocketProvider";
+// import SocketProvider from "@/components/SocketProvider";
+// import PeerProvider from "@/components/PeerProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,10 +22,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
         <Providers>
-          <SocketProvider>
-            <Header />
-            {children}
-          </SocketProvider>
+          {/* <SocketProvider> */}
+            {/* <PeerProvider> */}
+              <Header />
+              {children}
+            {/* </PeerProvider> */}
+          {/* </SocketProvider> */}
         </Providers>
       </body>
     </html>

@@ -13,11 +13,11 @@ const useSocketStore = create<SocketStore>((set, get) => ({
     const socket = get().socket;
 
     if(!socket){
-      const newSocket = io('localhost:8000');
+      const newSocket = io('ws://localhost:8000');
       set({socket: newSocket});
-      console.log("New socket created:", newSocket.id);
+      console.log("New socket created:");
     } else {
-      console.log("using previou socket", socket.id);
+      console.log("using previous socket");
     }
   }
 

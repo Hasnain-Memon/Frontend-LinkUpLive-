@@ -16,9 +16,11 @@ const SocketProvider = ({children}: {
         }
 
         return () => {
-            socket?.disconnect();
-            console.log("socket disconnected");
-        }
+            if (socket) {
+                socket.disconnect();
+                console.log("Socket disconnected");
+            }
+        };
     }, []);
 
     return <>{children}</>;
