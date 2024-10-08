@@ -8,7 +8,7 @@ function Header() {
 
   const session = useSession();
 
-  return <nav className='sticky bg-white top-0 h-16 w-full flex items-center justify-between px-4'>
+  return <nav className='sticky bg-[#FAFAFA] top-0 h-16 w-full flex items-center justify-between px-24'>
     <Logo />
     <div className='flex items-center gap-4'>
       {session.data?.user && <Link href={`/profile/@${session.data.user.name}`}>
@@ -21,10 +21,10 @@ function Header() {
         </div>
       </Link>}
 
-      {session.data?.user && <button className='bg-blue-600 font-semibold text-gray-100 rounded-md px-4 py-2 hover:bg-blue-500' onClick={() => signOut()} >Logout</button>}
+      {session.data?.user && <button className='bg-[#202253] font-semibold text-gray-100 rounded-md px-4 py-2 hover:bg-[#202253dc]' onClick={() => signOut()} >Logout</button>}
 
       {!session.data?.user && <button 
-      className='bg-blue-600 font-semibold text-gray-100 rounded-md px-4 py-2 hover:bg-blue-500'
+      className='bg-[#202253] font-semibold text-gray-100 rounded-md px-4 py-2 hover:bg-[#202253dc]'
       onClick={() => signIn()}
       >
         SignIn

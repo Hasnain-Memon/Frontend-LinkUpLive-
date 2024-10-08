@@ -35,7 +35,7 @@ const JoinBtn = () => {
         </h4>
         <input name="room-code" type="text" placeholder="Enter a Code" className="border border-gray-400 p-3 rounded-md outline-none text-gray-600"
         onChange={(e) => setRoomCode(e.target.value)} />
-        <button onClick={joinRoom} type="submit" className="text-gray-400 font-semibold bg-transparent text-center w-[245px] hover:text-blue-600 py-4 border border-blue-600 rounded-md">join</button>
+        <button onClick={joinRoom} type="submit" className="text-gray-400 font-semibold bg-transparent text-center w-[245px] hover:text-[#202253] py-4 border border-[#202253] rounded-md">join</button>
     </form>
   </>
 }

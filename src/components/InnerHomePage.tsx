@@ -47,7 +47,7 @@ export default function InnerHomePage() {
     </div>
   }
 
-  return <div className="px-24 h-screen w-full flex ">
+  return <div className="px-20 h-screen w-full flex ">
     <div className=" w-1/2 flex flex-col justify-center px-6 gap-8">
       <div id="hero-text" className="space-y-4">
         <h2 className="text-gray-800 font-semibold text-4xl">
@@ -60,7 +60,7 @@ export default function InnerHomePage() {
         <JoinBtn />
       </div>
       <div>
-        <span className="text-xs text-gray-600"><Link className="text-blue-600" href='about'>Learn more</Link> about Link Up Live</span>
+        <span className="text-xs text-gray-600"><Link className="text-[#202253]" href='about'>Learn more</Link> about Link Up Live</span>
       </div>
     </div>
 

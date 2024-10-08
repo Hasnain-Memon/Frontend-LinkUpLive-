@@ -31,7 +31,7 @@ const NewMeetingBtn = ({roomId} : {
       <h4 className=" relative text-center text-lg text-gray-800 font-semibold">
           New Meeting
       </h4>
-      <button onClick={initRoom} type="submit" className=' text-gray-100 px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2 bg-blue-600 w-[245px] hover:bg-blue-500'>
+      <button onClick={initRoom} type="submit" className=' text-gray-100 px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2 bg-[#202253] w-[245px] hover:bg-[#202253dc]'>
         <Image priority={true} src={camera_gif} alt="camera_gif" className="w-8 mr-4"/>
         <span className="mr-12">New meeting</span>
       </button>
