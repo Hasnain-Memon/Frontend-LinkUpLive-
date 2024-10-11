@@ -22,7 +22,7 @@ const JoinBtn = () => {
 
         socket?.emit('join-room', {name, roomId: roomCode});
 
-        router.push(`/room/${roomCode}/join-meeting/${name}`);
+        router.push(`/room/${roomCode}?joinerName=${name}`);
        } catch (error) {
         console.log('Error joining room');
        }

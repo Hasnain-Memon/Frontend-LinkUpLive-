@@ -1,18 +1,19 @@
 "use client";
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import VideoControlButtons from './VideoControlButtons';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import useSocketStore from '@/store/socketStore';
 import usePeerStore from '@/store/peerStore';
 
-function NewMeeting({roomId}: {
-    roomId: string,
+function NewMeeting({roomId, joinerName}: {
+    roomId?: string,
+    joinerName?: string
 }) {
 
   const [isCameraOn, setIsCameraOn] = useState<boolean>(true);
   const [remoteName, setRemoteName] = useState<string>("");
-
+  
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
 
@@ -36,6 +37,44 @@ function NewMeeting({roomId}: {
       socket?.emit('offer', {offer, to: peerId, name});
     } catch (error) {
       console.log("Error in handlerUserJoined", error);
+    }
+  }
+
+  const handleReceiveOffer = useCallback(async({offer, from, remoteName: peerName}:{
+    offer: RTCSessionDescription,
+    from: string,
+    remoteName: string
+  }) => {
+    try {
+      console.log("peer inside handleRecieveOffer", peer);
+      console.log("received offer:", offer.sdp);
+      console.log("receiving offer on the client side");
+      setRemoteName(peerName);
+
+      if (!peer) {
+        console.error("Peer is not initialized");
+        return;
+      }
+
+      await peer?.setRemoteDescription(new RTCSessionDescription(offer));
+
+      const answer = await peer?.createAnswer();
+      console.log("answer created");
+      await peer?.setLocalDescription(answer);
+
+      socket?.emit('answer', {answer, to: from});
+      console.log("answer sent to the server");
+
+    } catch (error) {
+      console.log("Error receiving offer on client");
+    }
+  }, [peer, socket]);
+
+  const handlerTestEvent = ({message}: {message: string}) => {
+    try {
+      console.log(message);
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -71,14 +110,18 @@ function NewMeeting({roomId}: {
     console.log("socket connected:", socket.connected);
 
     socket?.on('user:joined', handlerUserJoined);
+    socket?.on('receive-offer', handleReceiveOffer);
+    socket?.on('test:event',   handlerTestEvent);
     socket?.on('receive-answer', handleReceiveAnswer);
 
     return () => {
       socket?.off('user:joined', handlerUserJoined);
+      socket?.off('receive-offer', handleReceiveOffer);
+      socket?.off('test:event', handlerTestEvent);
       socket?.off('receive-answer', handleReceiveAnswer);
     }
 
-  }, [socket, socket?.connected, handlerUserJoined, handleReceiveAnswer, peer]);
+  }, [socket, peer]);
 
   return <div className= 'h-[calc(100vh-8rem)]'>
       <div className='w-full flex h-full items-center justify-center gap-4'>

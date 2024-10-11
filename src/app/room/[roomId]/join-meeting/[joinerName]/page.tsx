@@ -1,4 +1,5 @@
 import JoinMeeting from '@/components/JoinMeeting';
+import NewMeeting from '@/components/NewMeeting';
 import React from 'react';
 
 function Page({ params }: { params: { joinerName: string } }) {
@@ -7,7 +8,7 @@ function Page({ params }: { params: { joinerName: string } }) {
   
 
   return <>
-    <JoinMeeting joinerName={joinerName}/>
+    <NewMeeting joinerName={joinerName}/>
   </>;
 }
 
