@@ -13,7 +13,7 @@ function Landing() {
 
   useEffect(() => {
     if(session.status === "authenticated"){
-      router.push('/');
+      router.push('/dashboard');
     }
   }, [session.status, router]);
 
@@ -28,7 +28,7 @@ function Landing() {
         features to keep you connected.
       </p>
       <button className='font-bold bg-[#202253] hover:bg-[#202253dc] w-28 px-2 py-2 rounded-md text-gray-100'>
-        <Link href='/api/auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Flanding'>Get started</Link>
+        <Link href='/api/auth/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2F'>Get started</Link>
       </button>
     </div>
 

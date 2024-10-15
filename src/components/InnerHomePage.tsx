@@ -18,14 +18,14 @@ export default function InnerHomePage() {
 
   const session = useSession();
   const router = useRouter();
-  const {createSocket} = useSocketStore();
-  const {createPeer} = usePeerStore()
+  const {createSocket, socket} = useSocketStore();
+  const {createPeer, peer} = usePeerStore()
 
   useEffect(() => {
     createSocket();
     createPeer();
   }, [createSocket, createPeer]);
-
+  
   useEffect(() => {
     const id: string = uuidv4();
     setRoomId(id);
@@ -34,7 +34,7 @@ export default function InnerHomePage() {
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
-      router.push('/landing');
+      router.push('/');
     }
   }, [session.status, router]);
 

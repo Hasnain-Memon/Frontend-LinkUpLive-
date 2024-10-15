@@ -21,10 +21,10 @@ function Header() {
         </div>
       </Link>}
 
-      {session.data?.user && <button className='bg-[#202253] font-semibold text-gray-100 rounded-md px-4 py-2 hover:bg-[#202253dc]' onClick={() => signOut()} >Logout</button>}
+      {session.data?.user && <button className='bg-[#202253] font-medium text-gray-100 rounded-md px-4 py-2 hover:bg-[#202253dc]' onClick={() => signOut()} >Logout</button>}
 
       {!session.data?.user && <button 
-      className='bg-[#202253] font-semibold text-gray-100 rounded-md px-4 py-2 hover:bg-[#202253dc]'
+      className='bg-[#202253] font-medium text-gray-100 rounded-md px-4 py-2 hover:bg-[#202253dc]'
       onClick={() => signIn()}
       >
         SignIn

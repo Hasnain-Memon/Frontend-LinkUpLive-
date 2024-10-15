@@ -1,9 +1,9 @@
-import NewMeeting from '@/components/NewMeeting'
+import Meeting from '@/components/Meeting'
 import React from 'react'
 
 function page() {
   return <>
-    <NewMeeting />
+    <Meeting />
   </>
 }
 

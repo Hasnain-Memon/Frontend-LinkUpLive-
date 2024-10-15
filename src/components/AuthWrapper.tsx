@@ -13,16 +13,12 @@ export const AuthWrapper: FC<AuthWrapper> = ({ children }) => {
     const router = useRouter();
 
     useEffect(() => {
-        if (session.status = "unauthenticated") {
-            router.push('/landing');
+        if (session.status = "authenticated") {
+            router.push('/dashboard');
         }
     }, [session.status, router]);
 
-    if(session.status === "loading"){
-        return <div>loading...</div>
-    };
-
     return <>
-        {session.data ? children : null}
+        { children }
     </>;
 }

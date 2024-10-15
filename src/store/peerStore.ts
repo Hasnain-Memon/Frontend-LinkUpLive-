@@ -9,6 +9,7 @@ const usePeerStore = create<PeerStore>((set, get) => ({
     peer: null,
     createPeer: () => {
         const peer = get().peer;
+
         if(!peer){
             const newPeer = new RTCPeerConnection({
                 iceServers: [
@@ -17,6 +18,7 @@ const usePeerStore = create<PeerStore>((set, get) => ({
                     }
                 ]
             });
+
             set({peer: newPeer});
             console.log("New peer setted");
         } else {
